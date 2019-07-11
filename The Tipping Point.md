@@ -2,7 +2,7 @@
 
 [TOC]
 
-##The low of few
+## The low of few
 
 Connectors, Mavens, Salesmen
 
@@ -10,7 +10,7 @@ epidemics of info.
 
 6-degree
 
-##The stickness factor
+## The stickness factor
 
 Sesame Street, Blue's Clues
 
