@@ -6,6 +6,8 @@ Reciently, I read some books to help me for thinking and analizing.
 
 In China, since the low quality of education, I really need the authors to inspire and enlighten me.
 
+![](https://github.com/Freakwill/reading-books/blob/master/light.jpg)
+
 ## Philosophy
 
 - Origins of Analytical Philosopy (in Chinese)
