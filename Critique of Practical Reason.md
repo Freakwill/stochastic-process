@@ -1,5 +1,7 @@
 # Critique of Practical Reason
 
+
+
 ## Chapter 1
 
 ### Definition [Practical Principles]
@@ -27,3 +29,26 @@ maxims
 ### Vocabularies
 
 faculty, volition, causality, furnish, attain
+
+### Categories
+
+Subject/object, Susceptibility, Empirical
+
+### Phrases
+
+determining principle of the will, material practical rules, rational beings
+
+
+
+### Theorem 2
+
+All MPPs as such are of one and the same kind, and come under the general principle of self-love or private happiness.
+
+
+
+### Corollary
+
+All MPRs place the determining priciple of the will in the lower desires, and if there were no purely formal laws of the will adequate to determine it, then we could not admit any higher desire at all. 
+
+
+

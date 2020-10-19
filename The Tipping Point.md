@@ -2,7 +2,11 @@
 
 [TOC]
 
-## The low of few
+a book about social psychology/epidemics, esp. relative to commerce.
+
+
+
+##The law of few
 
 Connectors, Mavens, Salesmen
 
@@ -10,7 +14,7 @@ epidemics of info.
 
 6-degree
 
-## The stickness factor
+##The stickness factor
 
 Sesame Street, Blue's Clues
 
@@ -49,6 +53,14 @@ if you wanted to bring about a fundamental change in people's belief and behavio
 ### Transactive memory
 
 Wegner argues that when people know each other well, they create an implicit joint memory system — a transactive memory system — which is based on an understanding about who is best suited to remember what kinds of things.
+
+
+
+### Rumors
+
+Diffustion model/ B. Ryan & N. Gross
+
+*The Psychology of Rumors/Gordon Allport*
 
 
 
