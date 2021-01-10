@@ -1,5 +1,71 @@
 # Death
 
+Notaion:
+
+- D: Descarts
+- S: Socrates
+- P: Plato
+
+## 6 D & S Argument
+
+### D
+
+smile:face = soul:body
+
+smile without body/facem ~E!
+
+### S
+
+soul: think, rational
+
+soul: justice/goodness/beauty == body: desire, emotion
+
+soul: idea & form, number (P)
+
+
+
+## 9
+
+Souls are not impossible, ... those arguments are not compelling.
+
+
+
+## 10 Physical Argument--- Identity
+
+identity across time, metaphysical glue
+
+*Exmaple:*
+
+Car through time: Train through space. A single thing that was extended through time.
+
+
+
+the nature of personal identity across time.
+
+
+
+person:stage = sandwich:slice
+
+
+
+## 12-13 Personality theory
+
+The key to being the same person is having the very same ongoing, evolving personality
+
+Personality = {Beliefs, Desires, Memories, Goals, Ambitions...}
+
+*Example1* Torture exp. of Linda-Shelly
+
+*Example2* duplication problem, Napolean
+
+**No branching rule** (revisited version)
+
+
+
+personality:body = software:hardware
+
+*Example3* Brain operation: imprint left and right hemisphere to two bodies seperatedly.
+
 ## 17 Badness about death
 
 ### What is bad about death right here?
