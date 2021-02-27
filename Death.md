@@ -86,8 +86,8 @@ What is bad about being dead is you do not get to experience and enjoy any longe
 
 
 
-1. $i \exists !\Leftarrow bebadfor(x, i)$ （existence requirement）
-2. $dead(i)\Rightarrow i \lnot \exists!$
+1. $i: E !\Leftarrow bebadfor(x, i)$ （existence requirement）
+2. $dead(i)\Rightarrow  \lnot i: E!$
 3. $\lnot bebadfor(death,i)$
 
 
@@ -100,9 +100,9 @@ What is bad about being dead is you do not get to experience and enjoy any longe
 
 *Larry, nonexistence baby exp.*
 
-modest: $i, t \exists ! \Leftarrow bebadfor(x, i)$
+modest: $i, t: E ! \Leftarrow bebadfor(x, i)$
 
-bold: $i,t \exists !\Leftarrow  bebadfor(x, i),t$
+bold: $i,t: E !\Leftarrow  bebadfor(x, i),t$
 
 
 
