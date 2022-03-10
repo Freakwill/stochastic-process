@@ -12,6 +12,20 @@ In China, since the low quality of education, I really need the authors to inspi
 
 - Origins of Analytical Philosopy (in Chinese)
 - Critique of Practical Reason
+- Expression and Meaning
+
+
+
+## Psychology
+
+- Beyond Freedom and Dignity
+- Anxiety and Phobia
+
+
+
+## Ethics
+
+
 
 ## Social Science
 
