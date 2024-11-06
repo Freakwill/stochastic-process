@@ -13,10 +13,16 @@
 **Definition(Martingale)**
 $M_t$ is martingale (wrt $\mathsrc{F}_t$):
 1. boundedness: $E|M_t|<\infty$
-2. indep. $E(M_t|\mathsrc{F}_s)=M_s, s<t$
+2. stab. $E(M_t|\mathsrc{F}_s)=M_s, s<t$ ($E(M_t;A)=E(M_s;A), A \in \mathsrc{F}_s$)
 
 
-*Supplement* submaringale: $E(M_t|\mathsrc{F}_s)\leq M_s$, supermaringale: $E(M_t|\mathsrc{F}_s)\geq M_s$
+*Supplement* submartingale: $E(M_t|\mathsrc{F}_s)\leq M_s$, supermartingale: $E(M_t|\mathsrc{F}_s)\geq M_s$ (mon.)
+
+*Rermak* Martingle == bd. + stab.(mon.)
+
+*Lemma*
+If $X_T$: sub-mart., then
+$X_T\leq E(X_n|\mathcal{F}_T)$ where $T\leq N$ is a stopping time.
 
 
 *Example*
