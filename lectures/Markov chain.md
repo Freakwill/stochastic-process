@@ -37,7 +37,8 @@ only for discrete cases!
 - irreducible: for $i,j$ exists $n$, $K^n_{ij}>0$ (connect/communicate $i\to j$)
 - recurrent(resp. transient): for $i$, $\sum_n K^n_{ii}=\infty$(resp. $<\infty$) iff $E(\sharp\{x_n=i\}|x_1=i)=\infty$ iff $P(\eta_i=\sharp\{x_n=i\}=\infty|x_1=i)=1$
 - positive: exists $\pi K=\pi$
-- ergodic: exists unique $\pi$
+- priodic/apriodic: limiting distr.
+- ergodic(non-null rec. & apriodic): exists unique $\pi$
 
 *Facts.*
 1. irrducible => recurrent xor transient

@@ -2,6 +2,21 @@
 
 [TOC]
 
+## Markov chain Monte Carlo
+
+MCMC: Statistical/Stochastic simulation based on Markov chain.
+
+chain $x_t$ simulate $p$ iff $x_t\to  p$
+
+## Principle
+
+**Metropolis-Hastings chain**:
+1. $K(x,y)=\rho(x,y)q(y|x)+(1-r(x))\delta_x(y), r(x):=\int \rho(x,y)q(y|x)$
+2. DBC with $p$
+3. $p$ is the stationary distr.
+
+irreducible ==> Harris recurrent
+
 ### Metropolis-Hastings Algo.
 
 MCMC algo. for target distr. $p(x)$
@@ -110,8 +125,8 @@ Setting proposal distr. $q(u|x_k,k,k')$ and jump distr. $j$
   \alpha = \min\{JA, 1\}\\
   J = \det Jg(x_k,u), A=\frac{\pi_{k'}p(x'_{k'}|k)}{\pi_{k}p(x'_{k'}|k)}\frac{P(x_k,u|x'_{k'},u')}{P(x'_{k'},u'|x_k,u)} 
   $$
-where 
-$g:x_k, u\mapsto x'_{k'}, u'$: 1-1, DBC:$d_k+\dim u = d_{k'}+ \dim u'=d$
+  where 
+  $g:x_k, u\mapsto x'_{k'}, u'$: 1-1, DBC:$d_k+\dim u = d_{k'}+ \dim u'=d$
 
 Selecting proba.: $\hat p(k)\sim \sharp\{k_t=k\}$.
 
