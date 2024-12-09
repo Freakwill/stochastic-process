@@ -1,11 +1,13 @@
 # Stochastic DE
 
 *Abrev.*
+
 - SDE: stochastic diff. eq.
 - SI(E): stocahstic integral (eqations)
-- rv: random varable
+-  rv: random varable
 
 ## Introduction
+
 But SDE:
 $$
 d X_t = \mu_t(X_t)d t+\sigma_t(X_t)d B_t
@@ -23,6 +25,7 @@ $$
 and $dB_t(\omega)$ is not a "random measure".
 
 ## Ito integral
+
 The integral is restained to $[0,1]$ for convenience.
 
 **Definition(OIP)**
@@ -33,7 +36,7 @@ $$
 and $Z(t)$ is cad, i.e. $E|Z(t+h)-Z(t)|^2\to 0,h\to0+$.
 
 
-1. Consider $f=\chi_{(t,s]}$ (note the compatibility with addition)
+1. Consider $f=\chi_{(t,s]}$ (note the **compatibility with addition**)
 $$
 I(f):=\int_0^1f(\nu)\mathrm{d} Z(\nu)=Z_s-Z_t.
 $$
@@ -42,6 +45,8 @@ $$
 $$
 \|I(f)\|_2=\|f\|_2.
 $$
+
+(since (6) holds for 1, 2)
 
 Brown motion is OIP. Leads to Wiener integral.
 
@@ -65,7 +70,7 @@ $$
 $$
 \|X(t)\|_2=\int_0^1E|X(t)|^2\mathrm{d} t<\infty
 $$
-and adapt filtration $\mathscr{F}_t$ that is a martingale with $Z(t)$. such functional sp $\mathcal{V}\subset L^2([0,1]\times \Omega)$ is Hilbert sp. and subsp. of simple processes is dense in $\mathcal{V}$. When $\{t_i\}$ is refine enough, the simple processes
+and adapt filtration $\mathscr{F}_t$ that is a martingale with $Z(t)$. such functional sp $\mathcal{V}\subset L^2([0,1]\times \Omega)$ is Hilbert sp. and subsp. of simple processes is dense in $\mathcal{V}$ (the closure of simple processes). When $\{t_i\}$ is refine enough, the simple processes
 $$
 S_n(t)=\sum_{i=0}^{n-1}X(t_i)\chi_{(t_i,t_{i+1}]}(t)\to X(t)\in \mathcal{V},
 $$
@@ -87,7 +92,7 @@ With the knowledge of martingale, to verify the density of simple processes.
 **Theorem(Ito formula)**
 If $dX_t =\mu_tdt+\sigma_tdW_t$, then
 $$
-df(t,X_t)=\mu_t'dt+\sigma_t'dW_t\\
+df(t,X_t)=\mu_t'dt+\sigma_t'dW_t=\partial_t fdt+\partial_xf dX_t +\frac{1}{2}\partial_{xx}f\sigma_t^2\\
 \mu_t'=\partial_t f+\partial_x f(t,X_t) \mu_t + \frac{1}{2}\partial_{xx} f(t,X_t)\sigma_t^2\\
 \sigma_t'=\partial_x f(t,X_t)\sigma_t
 $$
@@ -98,9 +103,9 @@ $$
 
 *Corollary.* $df(X_t) = f'(X_t)dt+f''(X_t)(dX_t)^2$
 
-*Corollary.* If $f(t, X_t)=\log p_t(X_t)$, then
+*Corollary.* If $f(t, X_t)=\log p_t(X_t)$, let $s_t(x)=\partial_x\log p_t(x)$, then
 $$
-(H_t(X_t))'=E\partial_x f(t,X_t) \mu_t + \frac{1}{2}E\partial_{xx} f(t,X_t)\sigma_t^2
+(H_t(X_t))'=E\partial_x s_t(X_t) \mu_t + \frac{1}{2}E\partial_{xx} f(t,X_t)\sigma_t^2
 $$
 
 **Theorem(Ito formula for high-dim)**
@@ -111,7 +116,8 @@ f(t,X_t)=\mu_t'dt+\sigma_t'dW_t\\
 \sigma_t'=(\nabla_x f(t,X_t))^T\sigma_t
 $$
 
-## Fokker-Planck Equation
+## Fokker-Planck(Kolmogorov) Equation
+
 SDE:
 $$
 d X_t = \mu_t(X_t)dt+ \sigma_t(X_t)dB_t
@@ -128,9 +134,9 @@ $$
 \partial_t p(x,t) = L^* p, t>s\\
 p(x,s)=\delta_{xy}
 $$
-where $L^*f:=-\mathrm{div}_x \mu_t(x) f(x)+\frac{1}{2}\sum_{ij}\partial_{x_i,x_j} A_t(x)f(x)$, adj. of $Lf:=\mu_t\cdot\nabla f+\frac{1}{2}H(f)\cdot_F A_t$
+where $L^*f:=-\mathrm{div}_x (f(x)\mu_t(x)) +\frac{1}{2}\sum_{ij}\partial_{x_i,x_j} A_t(x)f(x)$, adj. of $Lf:=\mu_t\cdot\nabla f+\frac{1}{2}H(f)\cdot_F A_t$
 
-*Proof.* Use Ito formula for $f(X_t)$ and the fact of duality $(Lf,g)=(f,L^*g)$, so PDE: $(f, L^*p)=ELf= \partial_tEf$
+*Proof.* Use Ito formula for $f(X_t)$ and the fact of duality $(Lf,g)=(f,L^*g)$, so PDE: $(f, L^*p)=ELf= (Ef)'$  (duality argument)
 
 ---
 *exercise*
@@ -138,6 +144,12 @@ where $L^*f:=-\mathrm{div}_x \mu_t(x) f(x)+\frac{1}{2}\sum_{ij}\partial_{x_i,x_j
 1. compute $f(t,X_t)=e^{-\theta t} X_t$, given $X_t \sim I.P.(\mu_t,\sigma_t)$.
 
 2. compute $f(t,X_t)=\phi(X_t)$,
+
+3. compute $dX_t^2=2X_tdX_t+\sigma_t^2dt$
+
+4. 1D Fokker-Planck eq.
+
+    
 
 *References*
 Richard F. Bass. Stochastic Processes. Cambridge University Press, 2011.
