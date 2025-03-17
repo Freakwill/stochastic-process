@@ -8,7 +8,7 @@ import numpy as np
 
 
 # 漂移项系数函数 mu
-def mu(x, t):
+def mu(x: float, t: float):
     return 0.75 * x
 
 # 扩散项系数函数 sigma
@@ -19,14 +19,12 @@ def sigma(x, t):
 def dsigma_dx(x, t):
     return 0.3
 
-
 # 时间步长
 dt = 1/250
 # 总时间
 T = 1.0
 # 初始值
 x0 = 1.0
-
 
 def euler_maruyama_method():
     # Euler Maruyama scheme
@@ -51,7 +49,6 @@ def milstein_method():
         x[i + 1] = (x[i] + mu(x[i], t[i]) * dt + sigma(x[i], t[i]) * dW[i]
             + 0.5 * sigma(x[i], t[i]) * dsigma_dx(x[i], t[i]) * (dW[i] ** 2 - dt))
     return t, x
-
 
 
 import matplotlib.pyplot as plt
