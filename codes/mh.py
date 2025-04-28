@@ -8,12 +8,12 @@ import numpy as np
 from scipy.stats import norm  
  
 
-def mh(target_pdf, proposal, init_state=0, max_iter=1000, n_samples=1000, burn_in=100):
+def mh(target_pdf, proposal_pdf, init_state=0, max_iter=1000, n_samples=1000, burn_in=100):
     """Metropolis Hastings Algorithm
     
     Args:
         target_pdf (function): target pdf
-        proposal (scipy object): proposal distribution
+        proposal_pdf (scipy object): proposal distribution
         init_state: initialization state
         max_iter (int, optional): number of iterations
         burn_in (int, optional): size of burn-in sample
@@ -25,27 +25,56 @@ def mh(target_pdf, proposal, init_state=0, max_iter=1000, n_samples=1000, burn_i
     # Initialization
     current_state = init_state
 
+    eps = 1e-10
+
     def _step(current_state):
-        candidate_state = proposal(current_state).rvs()
-        accept_prob = min(1, (target_pdf(candidate_state)+1e-10) / (target_pdf(current_state)+1e-10))
+        candidate_state = proposal_pdf(current_state).rvs()
+        accept_prob = min(1, (target_pdf(candidate_state)+eps) / (target_pdf(current_state)+eps))
         if np.random.rand() < accept_prob:
             current_state = candidate_state
         return current_state
+
     # Metropolis-Hastings Algo.
-    i = 0
-    for k in range(burn_in): 
+    if burn_in > max_iter:
+        raise Exception('The chain is ended in the burn_in period')
+    for k in range(burn_in):
         current_state = _step(current_state)
-        i += 1
-        if i>max_iter:
-            raise 'The chain is ended in the burn_in period'
     samples = []
-    for k in range(n_samples):
+    for k in range(burn_in, min(n_samples, max_iter)):
         current_state = _step(current_state)
         samples.append(current_state)
-        i +=1
-        if i > max_iter:
-            break
     return np.asarray(samples)
+
+
+def estimate_param(sample, model_pdf, mean=False, *args, **kwargs):
+    """Estimate parameters by MCMC
+    
+    Args:
+        sample (TYPE): sample of the true distribution
+        model_pdf (TYPE): model distribution
+        mean (bool, optional): only return the mean of sample
+        *args, **kwargs: see `mh`
+    
+    Returns:
+        array
+    """
+    from scipy.stats import multivariate_normal
+
+    def target_pdf(param):
+        # likelihood of param based on the sample, as the target of MCMC
+        _pdf = model_pdf(param)
+        # p = priori_pdf(param)
+        return np.exp(np.mean([_pdf.logpdf(x) for x in sample])) # overflow error
+
+    # Run Metropolis-Hastings
+    samp = mh(target_pdf, *args, **kwargs)
+    if mean:
+        return np.mean(samp, axis=0)
+    else:
+        return samp
+
+    
+        
 
 
 if __name__ == '__main__':
@@ -76,15 +105,14 @@ if __name__ == '__main__':
         # cov = [[4, -1], [-1, 2]]  # Different standard deviations for x and y
         # target_pdf_2d = multivariate_normal(mean, cov).pdf
 
-
         from sklearn.mixture import GaussianMixture
  
-        # Mixture Gaussian
-        means = [[0, 0], [3, 3]]  # 两个高斯成分的均值
-        covariances = [[[1, 0], [0, 1]], [[1, 0.5], [0.5, 1]]]  # 两个高斯成分的协方差矩阵
-        weights = [0.5, 0.5]  # 两个高斯成分的权重
+        # paramenters of mixture Gaussian
+        means = [[0, 0], [3, 3]]
+        covariances = [[[1, 0], [0, 1]], [[1, 0.5], [0.5, 1]]]
+        weights = [0.5, 0.5]
          
-        # 使用sklearn的GaussianMixture来拟合和生成样本
+        # use GaussianMixture of sklearn
         gmm = GaussianMixture(n_components=2, means_init=means, covariance_type='full', random_state=0)
         gmm.covariances_ = np.array(covariances)
         gmm.weights_ = weights
@@ -92,12 +120,13 @@ if __name__ == '__main__':
         def proposal_2d(current_state, step_size=0.3):
             """Proposal distribution for 2D (normal distribution centered at current state)"""
             mean = current_state
-            cov = np.eye(2) * step_size**2
+            cov = step_size**2
             return multivariate_normal(mean, cov)
 
         def target_pdf_2d(x):
             p = weights[0] * multivariate_normal(means[0], covariances[0]).pdf(x) + weights[1] * multivariate_normal(means[1], covariances[1]).pdf(x)
             return p
+
         # Parameters
         init_state = [2, 2]
 
@@ -124,9 +153,11 @@ if __name__ == '__main__':
 
 
     def demo3():
-        # estimation params  ==> post. distr./likelihood simulation
-        # p(a|{x_i}) ~ sum_i ln p(x_i|a) + ln p(a)
-        # a^ = E(a|{x_i}) ~ mean of a_i, ai ~ p(a|{x_i}) (MCMC)
+        """Estimation params ==> post. distr. (regularized likelihood) simulation by MCMC
+
+            post. distr.: p(a|{x_i}) ~ sum_i ln p(x_i|a) + ln p(a)
+            post. exp.: a^ = E(a|{x_i}) ~ mean of a_i, where ai ~ p(a|{x_i}) (by MCMC)
+        """
 
         from scipy.stats import multivariate_normal
         import matplotlib.pyplot as plt
@@ -136,27 +167,33 @@ if __name__ == '__main__':
         true_pdf = multivariate_normal(mean, cov)
         S = true_pdf.rvs(size=50)
 
-        def target_pdf(mu):
-            # likelihood of param mu based sample S, as the target of MCMC
-            _pdf = multivariate_normal(mu, cov)
-            return np.exp(np.mean([_pdf.logpdf(x) for x in S])) # overflow error
-
-        def proposal_2d(current_state, step_size=0.3):
-            """Proposal distribution for 2D (normal distribution centered at current state)"""
+        def proposal(current_state, step_size=0.3):
+            """
+            Proposal distribution for 2D (normal distribution centered at current state)
+            """
             mean = current_state
-            cov = np.eye(2) * step_size**2
+            cov = step_size**2
             return multivariate_normal(mean, cov)
  
         init_state = [0.1, 0.2]
-        # Run Metropolis-Hastings
-        samples = mh(target_pdf, proposal_2d, init_state, n_samples=1500, max_iter=2000, burn_in=500)
-         
+
+        model_pdf = lambda mu: multivariate_normal(mu, cov)
+
+        samples = estimate_param(S, model_pdf, proposal_pdf=proposal, init_state=init_state, n_samples=1500, max_iter=1500, burn_in=500)
+
         # Plot the samples and the target PDF contour
         ma = np.max(samples, axis=0)
         mi = np.min(samples, axis=0)
         xs = np.linspace(mi[0]-0.1, ma[0]+0.1, 50)
         ys = np.linspace(mi[1]-0.1, ma[1]+0.1, 50)
         X, Y = np.meshgrid(xs, ys)
+
+        def target_pdf(param):
+            # likelihood of param based on the sample, as the target of MCMC
+            _pdf = model_pdf(param)
+            # p = priori_pdf(param)
+            return np.exp(np.mean([_pdf.logpdf(x) for x in sample])) # overflow error
+
         Z = [[target_pdf([x, y]) for x in xs] for y in ys]
 
         import matplotlib.pyplot as plt

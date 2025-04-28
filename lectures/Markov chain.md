@@ -20,13 +20,34 @@ Homogeneous: $P(X_n|X_{n-1})$ is not related to $n$
 1. $P(X_n=j|X_{n-1}=i)=K_{ij}$ (stochastic matrix/**transition matrix**)
 2. $P(X_0=i)=p_i$ (start proba.)
 
-*Fact*
+
+
+Hitting time and Number of passages:
+
+$\tau_i:=\inf\{n\geq 1: X_n=i\}$
+
+$\eta_i:=\sharp\{X_n=i\}=\sum_n1(X_n=i)$
+
+
+
+*Fact.*
 
 1. $P(X_n=j|X_0=i)=P^{n}_{ij}$
 2. $P(X_n=j)=(pP^n)_j$
 3. $E(g(X_n)|X_0=i)=(P^{n}g)_i$
+4. $\{N_i≥k\} = \{T_i(k)<∞\}$
+   $\{N_i=k\} = \{T_i(k)<∞,T_i(k+1)=∞\}$
+   in finite cases, exists $i,N_i=∞ $
+5. condi. mf: $P(N_i=k|X_0=i) = P(T_i<∞|X_0=i)^{k}P(T_i=∞|X_0=i)$
+   condi. sf: $P(N_i≥k|X_0=i) = P(T_i<∞|X0=i)^k$
 
+   $E(N_i) = \sum_ip_{ii}(n) = P(T_i<∞|X_0=i)/P(T_i=∞|X_0=i)$
+   $E(N_i) = ∞  \iff  N_i=∞$, a.s. $\iff T_i<∞$, a.s.
 
+6. If $j \to i$, then $p_{ii} \gg p_{ij}$ ($p_{ii}(n)\geq p_{ij}(m)$); $p_{ji} \gg p_{jj} \gg p_{ij}$;
+    If $i \leftrightarrow j$, then $p_{ii} \sim p_{jj}$
+
+   
 
 ### General States
 
@@ -52,11 +73,11 @@ $E_x\eta_A=\sum_nP_x(X_n\in A)=\sum_nK^n(x,A)$
 ### Facts
 
 1. $\{\eta_A=\infty\} =\{X_n\in A, i.o.\}$
-2. $E_x\eta_A>0\iff \exists n P_x(X_n\in A)=K^n(x,A)>0$,  denoted as $x\to A$
-3. $\tau_A<\infty = \bigcup_n(X_n\in A)$; $\tau_A(\omega)<\infty \iff \exists n, X_n(\omega)\in A$
-4. $\eta_A\geq k\iff \tau_A(k)<\infty$; $\eta_A= k\iff \tau_A(k)<\infty,\tau_A(k+1)=\infty$
+2. $E_x\eta_A>0\iff \exists n, P_x(X_n\in A)=K^n(x,A)>0$,  denoted as $x\to A$
+3. $\{\tau_A<\infty\} = \bigcup_n(X_n\in A)$; $\tau_A(\omega)<\infty \iff \exists n, X_n(\omega)\in A$
+4. $\{\eta_A\geq k\}= \{\tau_A(k)<\infty\}$; $\{\eta_A= k\}=\{\tau_A(k)<\infty,\tau_A(k+1)=\infty\}$
 5. $P_x(\tau_A(k)<\infty)=\lim_kP_x^k(\tau_A<\infty)$; $P_x(\eta_A=\infty)=\lim_kP_x^k(\tau_A<\infty)$, $x\in A$
-6. $\tau_A<\infty$ a.s. wrt $P_x$ for all $x\in A$  ==>$\eta_A=\infty$  a.s. ...
+6. $\tau_A<\infty$ a.s. wrt $P_x$ for all $x\in A$  ==> $\eta_A=\infty$  a.s. ...
 
 
 
@@ -64,40 +85,61 @@ $E_x\eta_A=\sum_nP_x(X_n\in A)=\sum_nK^n(x,A)$
 
 for discrete cases:
 
-$\eta_i:=\sharp\{x_n=i\}$
-
 - irreducible: for $i,j$ exists $n$, $K^n_{ij}>0$ (connect/communicate $i\to j$)
-- recurrent(resp. transient): for $i$, $\sum_n K^n_{ii}=\infty$(resp. $<\infty$) iff $E(\eta_i|x_1=i)=\infty$ iff $P(\eta_i=\infty|x_1=i)=1$
+- recurrent(resp. transient): for $i$, $\sum_n K^n_{ii}=\infty$(resp. $<\infty$) iff $E_i(\eta_i)=\infty$ iff $P_i(\eta_i=\infty)=1$
+- pos. rec: $m_i=E_im\tau_i<\infty$
+- Excursion: $\mathcal{E}_k:X_{\tau_i(k)}=i,\mathcal{E}_k:X_{\tau_i(k)+1},\cdots, X_{\tau_i(k+1)}=i$
 
 for general cases:
 
 - $\phi$-Irred. for all $A$ that $\phi A>0$, for $x\in A$, $x\to A$ denoted as $A\to A$
+
 - $A$ is recurrent: $E_x\eta_A=\infty$ for all $x\in A$
+
 - $A$ is transient: $\sup_x E_x\eta_A<\infty$ for all $x\in A$
+
 - ($\phi$-)recurrent/transient: ($\exists \phi$) $\phi$-irred.for all $A$, $A$ is recurrent/transient
+
 - $A$ is unif. transient: for all $x\in A$ exists $M$, $E_x\eta_A<M$.
+
 - transient: $S=\cup_i B_i$, $B_i$: unif. transient
+
 - $A$ Harris rec.: $\eta_A=\infty$ a.s. wrt $P_x$ for $x\in A$  (another def. is $\tau_A<\infty$ ...)
+
 - Harris rec.: for all $A$, $A$ Harris rec.
 
 - $\pi$ is invariant (proba.) measure: exists $\pi$, $\pi K=\pi$ and $\pi$ is a (proba.) measure ($\sigma$ finite)
+
 - positive: exists $\pi$, $\pi K=\pi$ and $\pi$ is a proba. measure/distr.
+
 - priodic/apriodic: limiting distr.
+
 - ergodic: pos. recurrent & apriodic iff exists unique invariant distr. $\pi$
 
-
+  
 
 Lemma:
 
-1. $m\pi(A)\leq \int E_x\eta_Ad\pi(x),m\in \N$; $E_x\eta_A<\infty\Rightarrow \pi A=0$
+1. $n\pi(A)\leq \int E_x\eta_Ad\pi(x),n\in \N$; $E_x\eta_A<\infty\Rightarrow \pi A=0$, where $\pi$ is inv. proba.
 
 
 
 *Facts.*
 
-1. irrducible => recurrent xor transient
+1. irrducible => recurrent xor transient; only one equivalence class.
+
 2. positive => recurrent (pos. recurrent)
-3. irreducible => positive iff $E_i\tau_i<\infty$ ($\pi_i=\frac{1}{E_i\tau_i}$ )
+
+3. irreducible => positive iff $m_i:=E_i\tau_i<\infty$ ($\pi_i=\frac{1}{m_i}$ ) for discrete cases
+
+4. irred. & rec. ==> E! unique stationary mea. $\pi$
+   $$
+   π_j \begin{cases}
+   \sim E \sharp\{X_t=j, 0<t≤\tau_i\},& j\neq i\\
+    =1,& j=i
+   \end{cases}\\
+   \sum_j\pi_j = m_i
+   $$
 
 **Kac thm**
 
@@ -105,11 +147,14 @@ $\phi$-irred. with an atom $\alpha$,  pos. iff $E_\alpha(\tau_\alpha)<\infty$$\p
 
 rec. ==> has a inv. ($\sigma$ finite) measure.
 
+
+
 *Remark*
 
-- irred.:  connectivity
-- rec.: stab.
-- pos. rec.: conv.
+- Irreducibility: the connectivity between states
+
+- Recurrence: the stability
+- Pos. recurrence: the convergence
 
 
 
