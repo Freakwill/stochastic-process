@@ -4,6 +4,7 @@
 Metropolis Hastings
 """
 
+from math import exp
 import numpy as np  
 from scipy.stats import norm  
  
@@ -29,6 +30,7 @@ def mh(target_pdf, proposal_pdf, init_state=0, max_iter=1000, n_samples=1000, bu
 
     def _step(current_state):
         candidate_state = proposal_pdf(current_state).rvs()
+        # compute accept proba.
         accept_prob = min(1, (target_pdf(candidate_state)+eps) / (target_pdf(current_state)+eps))
         if np.random.rand() < accept_prob:
             current_state = candidate_state
@@ -46,46 +48,15 @@ def mh(target_pdf, proposal_pdf, init_state=0, max_iter=1000, n_samples=1000, bu
     return np.asarray(samples)
 
 
-def estimate_param(sample, model_pdf, mean=False, *args, **kwargs):
-    """Estimate parameters by MCMC
-    
-    Args:
-        sample (TYPE): sample of the true distribution
-        model_pdf (TYPE): model distribution
-        mean (bool, optional): only return the mean of sample
-        *args, **kwargs: see `mh`
-    
-    Returns:
-        array
-    """
-    from scipy.stats import multivariate_normal
-
-    def target_pdf(param):
-        # likelihood of param based on the sample, as the target of MCMC
-        _pdf = model_pdf(param)
-        # p = priori_pdf(param)
-        return np.exp(np.mean([_pdf.logpdf(x) for x in sample])) # overflow error
-
-    # Run Metropolis-Hastings
-    samp = mh(target_pdf, *args, **kwargs)
-    if mean:
-        return np.mean(samp, axis=0)
-    else:
-        return samp
-
-    
-        
-
-
 if __name__ == '__main__':
 
     def demo1():
-        proposal = lambda x: norm(x, 0.3)
+        proposal_pdf = lambda x: norm(x, 0.3)
         target_pdf = norm(0, 1).pdf
-        samples = mh(target_pdf, proposal, n_samples=10000, burn_in=2000, max_iter=100000)
+        samples = mh(target_pdf, proposal_pdf, n_samples=10000, burn_in=2000, max_iter=100000)
+
         import matplotlib.pyplot as plt
         plt.hist(samples, bins=15, density=True, alpha=0.6, color='g')
-
         x_values = np.linspace(-3, 3, 200)
         plt.plot(x_values, target_pdf(x_values), 'r', alpha=0.5, label='Target Distribution')
 
@@ -95,6 +66,7 @@ if __name__ == '__main__':
         plt.legend()
         # plt.savefig('../lectures/mh.png')
         plt.show()
+
 
     def demo2():
         from scipy.stats import multivariate_normal
@@ -110,12 +82,12 @@ if __name__ == '__main__':
         # paramenters of mixture Gaussian
         means = [[0, 0], [3, 3]]
         covariances = [[[1, 0], [0, 1]], [[1, 0.5], [0.5, 1]]]
-        weights = [0.5, 0.5]
+        weights = [0.6, 0.4]
          
         # use GaussianMixture of sklearn
-        gmm = GaussianMixture(n_components=2, means_init=means, covariance_type='full', random_state=0)
-        gmm.covariances_ = np.array(covariances)
-        gmm.weights_ = weights
+        # gmm = GaussianMixture(n_components=2, means_init=means, covariance_type='full', random_state=0)
+        # gmm.covariances_ = np.array(covariances)
+        # gmm.weights_ = weights
          
         def proposal_2d(current_state, step_size=0.3):
             """Proposal distribution for 2D (normal distribution centered at current state)"""
@@ -150,80 +122,4 @@ if __name__ == '__main__':
         plt.title('Metropolis-Hastings Algorithm in 2D')
         plt.legend()
         plt.show()
-
-
-    def demo3():
-        """Estimation params ==> post. distr. (regularized likelihood) simulation by MCMC
-
-            post. distr.: p(a|{x_i}) ~ sum_i ln p(x_i|a) + ln p(a)
-            post. exp.: a^ = E(a|{x_i}) ~ mean of a_i, where ai ~ p(a|{x_i}) (by MCMC)
-        """
-
-        from scipy.stats import multivariate_normal
-        import matplotlib.pyplot as plt
-
-        mean = [0, 0]
-        cov = [[4, -1], [-1, 2]]
-        true_pdf = multivariate_normal(mean, cov)
-        S = true_pdf.rvs(size=50)
-
-        def proposal(current_state, step_size=0.3):
-            """
-            Proposal distribution for 2D (normal distribution centered at current state)
-            """
-            mean = current_state
-            cov = step_size**2
-            return multivariate_normal(mean, cov)
- 
-        init_state = [0.1, 0.2]
-
-        model_pdf = lambda mu: multivariate_normal(mu, cov)
-
-        samples = estimate_param(S, model_pdf, proposal_pdf=proposal, init_state=init_state, n_samples=1500, max_iter=1500, burn_in=500)
-
-        # Plot the samples and the target PDF contour
-        ma = np.max(samples, axis=0)
-        mi = np.min(samples, axis=0)
-        xs = np.linspace(mi[0]-0.1, ma[0]+0.1, 50)
-        ys = np.linspace(mi[1]-0.1, ma[1]+0.1, 50)
-        X, Y = np.meshgrid(xs, ys)
-
-        def target_pdf(param):
-            # likelihood of param based on the sample, as the target of MCMC
-            _pdf = model_pdf(param)
-            # p = priori_pdf(param)
-            return np.exp(np.mean([_pdf.logpdf(x) for x in sample])) # overflow error
-
-        Z = [[target_pdf([x, y]) for x in xs] for y in ys]
-
-        import matplotlib.pyplot as plt
-        fig, ax = plt.subplots(1, 2, figsize=(6, 3), constrained_layout=True)
- 
-        ax[0].plot(samples[:, 0], samples[:, 1], '--', alpha=0.6, label=r'Samples of $\mu$')
-        ax[0].contour(X, Y, Z, levels=15, cmap='viridis', alpha=0.5)
-        ax[0].set_xlabel(r'$\mu_0$')
-        ax[0].set_ylabel(r'$\mu_1$')
-        ax[0].set_title(r'posterior distribution of $\mu$')
-
-        mean = np.mean(samples, axis=0)
-        print(mean)
-
-        true_pdf = multivariate_normal(mean, cov).pdf
-        ma = np.max(S, axis=0)
-        mi = np.min(S, axis=0)
-        x = np.linspace(mi[0]-0.1, ma[0]+0.1, 50)
-        y = np.linspace(mi[1]-0.1, ma[1]+0.1, 50)
-        X, Y = np.meshgrid(x, y)
-        Z = true_pdf(np.dstack((X, Y)))
-
-        ax[1].scatter(S[:,0], S[:,1], s=8, alpha=0.6, label='Samples of $x$')
-        ax[1].contour(X, Y, Z, levels=15, cmap='viridis', alpha=0.5)
-        ax[1].set_xlabel("x1")
-        ax[1].set_ylabel("x2")
-        ax[1].set_title(f'estimation of true distribution')
-
-        plt.legend()
-        plt.show()
-
-    demo3()
 

@@ -12,7 +12,7 @@ chain $x_t$ simulate $p$ iff $x_t\to  p$
 
 **Metropolis-Hastings chain**:
 1. $K(x,y)=\rho(x,y)q(y|x)+(1-r(x))\delta_x(y), r(x):=\int \rho(x,y)q(y|x)$
-2. DBC with $p$
+2. define $0\leq \rho\leq 1$ to satisfies DBC with $p$
 3. $p$ is the stationary distr.
 
 irreducible ==> Harris recurrent
@@ -25,27 +25,37 @@ MCMC algo. for target distr. $p(x)$
 
 for $p(x)$,
 set proposal proba $q(y|x)$
+
 1. initialize $x_1$
 2. for $t=1,2,\cdots$
 
    - sample $x_{t+1}\sim q(\cdot|x_t)$
-   - compute accept proba $a=a(x_t,x_{t+1})$ where $a(x,y):=\min \{\frac{q(x|y)p(y)}{q(y|x)p(x)},1\}$
+   - compute *accept proba* $a=a(x_t,x_{t+1})$ where $a(x,y):=\min \{\frac{q(x|y)p(y)}{q(y|x)p(x)},1\}$
    - update
    $$x_{t+1}|x_t =\begin{cases}
       x_{t+1},& a\\
       x_t, & 1-a
    \end{cases}$$
 
-*Remark* M-H is an accept-reject precedure for Markov chain.
+*Remark* M-H is an accept-reject precedure for Markov chain. The kernel of $x_t$ is $K$
 
 *Remark* An alternation of accept proba $a(x,y)=\frac{1}{1+\frac{q(y|x)p(x)}{q(x|y)p(y)}}$ (Boltzmann algo.)
 
 *Remark* $p(y) \ll q(y|x)$ for all $x$
 
+
+
+### Special forms of MH
+
 - **Independant chain M-H**: $q(y|x)=q(y)$, and $a(x,y):=\min\{\frac{p(y)q(x)}{p(x)q(y)},1\}$ (almost equiv. to AR method)
+
 - **Random walk(Metropolis algo.)**: $q(y|x)=q(y-x)=q(x-y)$, and $a(x,y):=\min\{\frac{p(y)}{p(x)},1\}$
+
 - **Gibbs sampling**: $q(y|x)=p(y|x)$, $a(x,y)=1$
-- **Langevin algo./dynamics**: $y=x+\frac{\sigma^2}{2}\nabla\log p(x)+\sigma\epsilon,\epsilon\sim N(0,1)$
+
+- **Langevin algo./dynamics**: $y=x+\frac{\sigma^2}{2}\nabla\log p(x)+\sigma\epsilon,\epsilon\sim N(0,1)$ where $\nabla\log p(x)$ is score function.
+
+  
 
 ### Variants of M-H algo.
 
@@ -60,6 +70,12 @@ or $q((x',y')|(x,y))=p(x'|y')p(y'|x)p(x|y)$ for $(x,y)$
 2. $y_{t}\sim P(y|x_t)$, or $P(x_{t},y)$
 
 $(x_t,y_t)\to p(x,y), x_t\to p(x), y_t\to p(y)$
+
+alternative Markov chain:
+
+$\cdots\to x_t \to y_t \to x_{t+1} \to \cdots$
+
+
 
 #### Random Walk
 
@@ -94,14 +110,21 @@ Proposal distr. $q(y|x)=x+\frac{\sigma^2}{2}\nabla \log p(x)+\sigma\epsilon,\eps
 #### Hit-and-Run
 
 *Algo*
+
+target $f:\Omega$
+
+proposal distr.: $g$
+
 1. init $x_0\in\R^n$
 2. loop $t=0,1,\cdots$
    - $d_t\sim S^{n-1}$
-   - Let $\Omega:=\{\lambda|x_t+\lambda d\}$
-   - $\lambda\sim g(\lambda|d_t,x_t),\lambda\in\Omega$
-   - $x'=x+\lambda d$, $x_{t+1}=\begin{cases}x' & a(x'|x_t)\\
+   - Let $\Omega_t:=\{\lambda|x_t+\lambda d_t\in\Omega\}$
+   - $\lambda\sim g(\lambda|d_t,x_t),\lambda\in\Omega_t$
+   - $x'=x+\lambda d$, $x_{t+1}=\begin{cases}x', & a(x'|x_t)\\
    x_t, & else \\
    \end{cases}$
+
+proposal distr. in MH algo: $q(x'|x)=g(\|x'-x\||\frac{x'-x}{\|x'-x\|},x)$
 
 ## RJ MCMC
 
@@ -109,7 +132,7 @@ Background: **model selection**, select the optimal model, for data $D$ from
 $$
 p_k(x|\theta_k),k=1,\cdots,K
 $$
-Problem: to simulate $p(k,\theta_k|D)$.
+Problem: to simulate $p(k,\theta_k|D)$. ==> $\hat{k}$
 
 Simulation Model:
 - Target distr: $p(k,x_k)\propto p_k(x_k)\pi_k$ (mixed model of $p_k(x_k)$), $d_k:=\dim x_k$
@@ -123,12 +146,14 @@ Setting proposal distr. $q(u|x_k,k,k')$ and jump distr. $j$
 4. compute acceptance proba.
   $$
   \alpha = \min\{JA, 1\}\\
-  J = \det Jg(x_k,u), A=\frac{\pi_{k'}p(x'_{k'}|k)}{\pi_{k}p(x'_{k'}|k)}\frac{P(x_k,u|x'_{k'},u')}{P(x'_{k'},u'|x_k,u)} 
+  J = \det Jg(x_k,u), A=\frac{\pi_{k'}p(x'_{k'}|k)}{\pi_{k}p(x_{k}|k)}\frac{P(x_k,u|x'_{k'},u')}{P(x'_{k'},u'|x_k,u)}
   $$
   where 
   $g:x_k, u\mapsto x'_{k'}, u'$: 1-1, DBC:$d_k+\dim u = d_{k'}+ \dim u'=d$
 
 Selecting proba.: $\hat p(k)\sim \sharp\{k_t=k\}$.
+
+Proposal distr. $Q(x'_{k'},k'|x_k,k)$: $j, q, g$
 
 ### Carlin-Chib Algo.
 
