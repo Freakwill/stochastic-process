@@ -46,6 +46,11 @@ $\eta_i:=\sharp\{X_n=i\}=\sum_n1(X_n=i)$
 
 6. If $j \to i$, then $p_{ii} \gg p_{ij}$ ($p_{ii}(n)\geq p_{ij}(m)$); $p_{ji} \gg p_{jj} \gg p_{ij}$;
     If $i \leftrightarrow j$, then $p_{ii} \sim p_{jj}$
+<<<<<<< HEAD
+=======
+
+   
+>>>>>>> 588e9b78a77ef093f054a5f65e2844958bd479e4
 
 ### General States
 
@@ -90,6 +95,11 @@ $E_x\eta_A=\sum_nP_x(X_n\in A)=\sum_nK^n(x,A)$
 
 #### For general cases:
 
+- irreducible: for $i,j$ exists $n$, $K^n_{ij}>0$ (connect/communicate $i\to j$)
+- recurrent(resp. transient): for $i$, $\sum_n K^n_{ii}=\infty$(resp. $<\infty$) iff $E_i(\eta_i)=\infty$ iff $P_i(\eta_i=\infty)=1$
+- pos. rec: $m_i=E_im\tau_i<\infty$
+- Excursion: $\mathcal{E}_k:X_{\tau_i(k)}=i,\mathcal{E}_k:X_{\tau_i(k)+1},\cdots, X_{\tau_i(k+1)}=i$
+
 - $A$ is Irred.:   for $x\in S$, $x\to A$, denoted as $S\to A$
 
 - $\phi$-Irred.: for all $A$ that $\phi A>0$, for $x\in S$, $x\to A$, i.e. $S\to A$
@@ -120,8 +130,6 @@ $E_x\eta_A=\sum_nP_x(X_n\in A)=\sum_nK^n(x,A)$
   $$
   K^n(\alpha,\alpha)\to \pi(\alpha)
   $$
-  
-
 
 
 #### Facts
@@ -160,7 +168,6 @@ rec. ==> has a inv. ($\sigma$ finite) measure.
 *Remark*
 
 - Irreducibility: the connectivity between states
-
 - Recurrence: the stability
 - Pos. recurrence: the convergence
 - (a)priodic/ergodicity: existence of limit

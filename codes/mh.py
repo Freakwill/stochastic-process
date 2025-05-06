@@ -48,6 +48,37 @@ def mh(target_pdf, proposal_pdf, init_state=0, max_iter=1000, n_samples=1000, bu
     return np.asarray(samples)
 
 
+def estimate_param(sample, model_pdf, mean=False, *args, **kwargs):
+    """Estimate parameters by MCMC
+    
+    Args:
+        sample (TYPE): sample of the true distribution
+        model_pdf (TYPE): model distribution
+        mean (bool, optional): only return the mean of sample
+        *args, **kwargs: see `mh`
+    
+    Returns:
+        array
+    """
+    from scipy.stats import multivariate_normal
+
+    def target_pdf(param):
+        # likelihood of param based on the sample, as the target of MCMC
+        _pdf = model_pdf(param)
+        # p = priori_pdf(param)
+        return np.exp(np.mean([_pdf.logpdf(x) for x in sample])) # overflow error
+
+    # Run Metropolis-Hastings
+    samp = mh(target_pdf, *args, **kwargs)
+    if mean:
+        return np.mean(samp, axis=0)
+    else:
+        return samp
+
+    
+        
+
+
 if __name__ == '__main__':
 
     def demo1():
@@ -82,12 +113,6 @@ if __name__ == '__main__':
         # paramenters of mixture Gaussian
         means = [[0, 0], [3, 3]]
         covariances = [[[1, 0], [0, 1]], [[1, 0.5], [0.5, 1]]]
-        weights = [0.6, 0.4]
-         
-        # use GaussianMixture of sklearn
-        # gmm = GaussianMixture(n_components=2, means_init=means, covariance_type='full', random_state=0)
-        # gmm.covariances_ = np.array(covariances)
-        # gmm.weights_ = weights
          
         def proposal_2d(current_state, step_size=0.3):
             """Proposal distribution for 2D (normal distribution centered at current state)"""
