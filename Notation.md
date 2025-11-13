@@ -18,8 +18,6 @@ W: Witgenstein
 
 D: 抑郁症
 
-M: 自慰
-
 X: 性行为
 
 

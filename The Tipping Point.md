@@ -6,7 +6,7 @@ a book about social psychology/epidemics, esp. relative to commerce.
 
 
 
-##The law of few
+## The law of few
 
 Connectors, Mavens, Salesmen
 
@@ -14,7 +14,7 @@ epidemics of info.
 
 6-degree
 
-##The stickness factor
+## The stickness factor
 
 Sesame Street, Blue's Clues
 
@@ -58,7 +58,7 @@ Wegner argues that when people know each other well, they create an implicit joi
 
 ### Rumors
 
-Diffustion model/ B. Ryan & N. Gross
+Diffusion model/ B. Ryan & N. Gross
 
 *The Psychology of Rumors/Gordon Allport*
 
